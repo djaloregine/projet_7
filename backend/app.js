@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const apiRoutes = require('./routes').router;
 
 const app = express();
 
@@ -13,12 +14,11 @@ app.use((req, res, next) => {
    next();
 });
 
+app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use((req, res) => {
-   res.json({ message: 'Votre requête a bien été reçue !' }); 
-});
+app.use('/api/', apiRoutes);
 
 module.exports = app;
