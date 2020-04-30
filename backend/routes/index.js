@@ -4,12 +4,10 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const multer = require('../middleware/multer-config.js');
 
-var userCtrl = require('../controllers/userCtrl');
 var userController = require('../controllers/userController');
-
-var marketCtrl = require('../controllers/marketCtrl');
-var messageCtrl = require('../controllers/messageCtrl');
-var mediaCtrl = require('../controllers/mediaCtrl');
+var messageController = require('../controllers/messageController');
+var itemController = require('../controllers/itemController');
+var mediaController = require('../controllers/mediaController');
 
 // Router
 exports.router = (function() {
@@ -25,25 +23,25 @@ exports.router = (function() {
     router.delete('/users/me/', auth, userController.deleteUserProfile);
 
     // Messages routes
-    // router.get('/messages/', auth, messageCtrl.getAllMessages);
-    // router.get('/messages/:id', auth, messageCtrl.getMessage);
-    // router.post('/messages/', auth, messageCtrl.createMessage);
-    // router.put('/messages/:id', auth, messageCtrl.updateMessage);
-    // router.delete('/messages/:id', auth, messageCtrl.deleteMessage);
+    router.get('/messages/', auth, messageController.getAllMessages);
+    router.get('/messages/:id', auth, messageController.getMessage);
+    router.post('/messages/', auth, messageController.createMessage);
+    router.put('/messages/:id', auth, messageController.updateMessage);
+    router.delete('/messages/:id', auth, messageController.deleteMessage);
 
     // Market Routes
-    // router.get('/items/', auth, marketCtrl.getAllItems);
-    // router.get('/items/:id', auth, marketCtrl.getItem);
-    // router.post('/items/', auth, multer, marketCtrl.createItem);
-    // router.put('/items/:id', auth, multer, marketCtrl.updateItem);
-    // router.delete('/items/:id', auth, marketCtrl.deleteItem);
+    // router.get('/items/', auth, itemController.getAllItems);
+    // router.get('/items/:id', auth, itemController.getItem);
+    router.post('/items/', auth, multer, itemController.createItem);
+    // router.put('/items/:id', auth, multer, itemController.updateItem);
+    // router.delete('/items/:id', auth, itemController.deleteItem);
 
     // Medias routes
-    // router.get('/medias/', auth, mediaCtrl.getAllMedias);
-    // router.get('/medias/:id', auth, mediaCtrl.getMedia);
-    // router.post('/medias/', auth, multer, mediaCtrl.createMedia);
-    // router.put('/medias/:id', auth, multer, mediaCtrl.updateMedia);
-    // router.delete('/medias/:id', auth, mediaCtrl.deleteMedia);
+    // router.get('/medias/', auth, mediaController.getAllMedias);
+    // router.get('/medias/:id', auth, mediaController.getMedia);
+    // router.post('/medias/', auth, multer, mediaController.createMedia);
+    // router.put('/medias/:id', auth, multer, mediaController.updateMedia);
+    // router.delete('/medias/:id', auth, mediaController.deleteMedia);
 
 
   return router;

@@ -6,12 +6,12 @@ module.exports = (req, res, next) => {
         if(!token) return res.status(400).send('Accès refusé !');
 
         const verified = jwt.verify(token, process.env.SECRET_TOKEN);
-        const userID = verified.userId;
 
         // rajouter une condition plutard : req.body.userId == userID
-        if (!userID) return res.status(400).send('Invalid user !');
+        if (!verified.userId) return res.status(401).send('Token invalid !');
         
-        req.userId = userID;
+        req.userId = verified.userId;
+        req.isAdmin = verified.isAdmin;
         next();
     } catch {
         res.status(401).json({ error: 'Invalid request!' });

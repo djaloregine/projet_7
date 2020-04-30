@@ -73,7 +73,7 @@ exports.register = (req, res) => {
                 password: bcryptedPassword,
                 imgUrl: imageUrl,
                 isAdmin: 0
-            })
+            });
 
             // return userId & success
             return res.status(200).json({ success: 'Utilisateur enregistré !' });
@@ -81,7 +81,6 @@ exports.register = (req, res) => {
         .catch(error => {
             return res.status(400).json({ error });
         })
-
 }
 
 // Login User
@@ -139,21 +138,59 @@ exports.getUserProfile = (req, res) => {
 
     getUserById(req.userId)
         .then(user =>{
-            res.status(200).json({ user });
+            return res.status(200).json(user);
         })
         .catch(error => {
-            res.status(400).json({ error });
+            return res.status(400).json(error);
         })
 }
 
 // Update User Profile
 exports.updateUserProfile = (req, res) => {
 
+    // creer une fonction pour rassembler tout les verif et rajouter une variable erreur
+    // si erreur est null = ok sinon stop le script
+
+    // Check input null
+    if (!req.body.email || !req.body.password || !req.body.firstname || !req.body.lastname) {
+        return res.status(400).json({ error: 'Certains champs sont vides !' });
+    }
+
+    // Check email
+    if (!EMAIL_REGEX.test(req.body.email)) {
+        return res.status(400).json({ error: "Adresse mail non valide" });
+    }
+
+    // Check first name
+    if (req.body.firstname.length > 21 || req.body.firstname.length < 2) {
+        return res.status(400).json({ error: 'Le prénom doit avoir une longueur de 3 à 19 caractères.' });
+    }
+    if(!req.body.firstname.match(LETTERS_REGEX)) {
+        return res.status(400).json({ error: 'Le prénom doit contenir que des lettres' });
+    }
+
+    // Check last name
+    if (req.body.lastname.length >= 20 || req.body.lastname.length < 3) {
+        return res.status(400).json({ error: 'Le nom doit avoir une longueur de 3 à 19 caractères.' });
+    }
+    if(!req.body.lastname.match(LETTERS_REGEX)) {
+        return res.status(400).json({ error: 'Le nom doit contenir que des lettres' });
+    }
+
+    // Check password
+    if (!PASSWORD_REGEX.test(req.body.password)) {
+        return res.status(400).json({ error: 'Le mot de passe est invalide. Il doit avoir une longueur de 4 à 16 caractères et contenir au moins 1 chiffre.' });
+    }
+
+    // Check image
+    // if(!req.file) return res.status(400).json({ error: "Une image est obligatoire !" });
+    // imageUrl = `${req.protocol}://${req.get('host')}/images/profiles/${req.file.filename}`;
+
     getUserById(req.userId)
         .then(user => {
             if(!user) return res.status(400).json({ error: "L'utilisateur n'existe pas !" });
 
-            return queryUpdateUser(user, req.body);
+            return queryUpdateUser(user, req.body); //imageUrl
         })
         .then(results => {
             res.status(200).json({ results });
@@ -186,7 +223,7 @@ function getUserById(id) {
     return new Promise((resolve, reject) => {
 
         const user = models.User.findOne({
-            attributes: ['id', 'firstname', 'lastname', 'email', 'imgUrl'],
+            attributes: ['id', 'firstname', 'lastname', 'email', 'imgUrl', 'isAdmin'],
             where: { id: id }
         });
 
@@ -204,7 +241,7 @@ function getUserByEmail(email) {
 
         // Only function who to get password
         const user = models.User.findOne({
-            attributes: ['id', 'firstname', 'lastname', 'email', 'imgUrl', 'password'],
+            attributes: ['id', 'firstname', 'lastname', 'email', 'imgUrl', 'password', 'isAdmin'],
             where: { email: email }
         });
 
@@ -216,32 +253,15 @@ function getUserByEmail(email) {
     })
 }
 
-function queryUpdateUser(user, formParams) {
+function queryUpdateUser(user, formParams, imageUrl) {
     return new Promise((resolve, reject) => {
-        // Form parameters
-        var prenom   = formParams.firstname;
-        var nom      = formParams.lastname;
-        var mail     = formParams.email;
-        var image    = formParams.imgUrl;
-
-        // Form verification
-        if (mail == null || nom == null || prenom == null) {
-            return res.status(400).json({ error: 'Certains champs sont vides !' });
-        }
-
-        checkEmail(mail, res);
-        checkFirstname(prenom, res);
-        checkLastname(nom, res);
-
-        // Img verif
-
         // Update user after verification
         const userModify = user.update(
             {
-                firstname: prenom,
-                lastname: nom,
-                email: mail,
-                imgUrl: image
+                firstname: formParams.firstname,
+                lastname: formParams.lastname,
+                email: formParams.email,
+                imgUrl: imageUrl
             }
         );
 
@@ -293,8 +313,3 @@ function cryptPassword(password) {
         } 
     })
 }
-
-
-
-
-

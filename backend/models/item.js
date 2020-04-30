@@ -1,20 +1,20 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Market = sequelize.define('Market', {
+  const Item = sequelize.define('Item', {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     price: DataTypes.INTEGER,
     imageUrl: DataTypes.STRING,
     userID: DataTypes.INTEGER
   }, {});
-  Market.associate = function(models) {
+  Item.associate = function(models) {
     // associations can be defined here
     
-    models.Market.belongsTo(models.User, {
+    models.Item.belongsTo(models.User, {
       foreignKey: {
         allowNull: false
       }
     })
   };
-  return Market;
+  return Item;
 };
