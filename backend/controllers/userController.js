@@ -125,7 +125,7 @@ exports.login = (req, res) => {
             // return userId & token
             res.status(200).json({
                 userId: user.id,
-                token: token
+                token: 'Bearer '+token
             });
         })
         .catch(error => {
@@ -189,6 +189,13 @@ exports.updateUserProfile = (req, res) => {
     getUserById(req.userId)
         .then(user => {
             if(!user) return res.status(400).json({ error: "L'utilisateur n'existe pas !" });
+
+            // Reprend l'image dans la bdd si aucune image est ajoutée
+            // if(!req.file) { 
+            //     imageUrl = user.imgUrl; 
+            // } else {
+            //     imageUrl = `${req.protocol}://${req.get('host')}/images/medias/${req.file.filename}`;
+            // }
 
             return queryUpdateUser(user, req.body); //imageUrl
         })
@@ -261,7 +268,8 @@ function queryUpdateUser(user, formParams, imageUrl) {
                 firstname: formParams.firstname,
                 lastname: formParams.lastname,
                 email: formParams.email,
-                imgUrl: imageUrl
+                updatedAt: new Date()
+                // imgUrl: imageUrl
             }
         );
 

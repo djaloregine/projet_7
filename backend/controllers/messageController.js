@@ -4,9 +4,9 @@ const models = require('../models');
 // Get all messages
 exports.getAllMessages = (req, res) => {
     getMessages()
-        .then(data => {  //data retourne un tableau
-            if(data.length == 0) return res.status(400).json({ error : "Il n'y a aucun messages !"});
-            return res.status(200).json(data);
+        .then(messages => {  //data retourne un tableau
+            if(messages.length == 0) return res.status(400).json({ error : "Il n'y a aucun messages !"});
+            return res.status(200).json(messages);
         })
         .catch(error => {
             return res.status(400).json(error);

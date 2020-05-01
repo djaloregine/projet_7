@@ -30,18 +30,18 @@ exports.router = (function() {
     router.delete('/messages/:id', auth, messageController.deleteMessage);
 
     // Market Routes
-    // router.get('/items/', auth, itemController.getAllItems);
-    // router.get('/items/:id', auth, itemController.getItem);
+    router.get('/items/', auth, itemController.getAllItems);
+    router.get('/items/:id', auth, itemController.getItem);
     router.post('/items/', auth, multer, itemController.createItem);
-    // router.put('/items/:id', auth, multer, itemController.updateItem);
-    // router.delete('/items/:id', auth, itemController.deleteItem);
+    router.put('/items/:id', auth, multer, itemController.updateItem);
+    router.delete('/items/:id', auth, itemController.deleteItem);
 
     // Medias routes
-    // router.get('/medias/', auth, mediaController.getAllMedias);
-    // router.get('/medias/:id', auth, mediaController.getMedia);
-    // router.post('/medias/', auth, multer, mediaController.createMedia);
-    // router.put('/medias/:id', auth, multer, mediaController.updateMedia);
-    // router.delete('/medias/:id', auth, mediaController.deleteMedia);
+    router.get('/medias/', auth, mediaController.getAllMedias);
+    router.get('/medias/:id', auth, mediaController.getMedia);
+    router.post('/medias/', auth, multer, mediaController.createMedia);
+    router.put('/medias/:id', auth, multer, mediaController.updateMedia);
+    router.delete('/medias/:id', auth, mediaController.deleteMedia);
 
 
   return router;
