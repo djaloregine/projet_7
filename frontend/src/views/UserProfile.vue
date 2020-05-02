@@ -4,6 +4,7 @@
     <h3>Mon profil</h3>
     <hr>
     <img :src="user.imgUrl" alt="Phote de profil">
+    <br>
     <p>Prenom : {{ user.firstname }}</p>
     <p>Nom : {{ user.lastname }}</p>
     <p>Email : {{ user.email }}</p>
