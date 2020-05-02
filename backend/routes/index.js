@@ -15,6 +15,7 @@ exports.router = (function() {
 
     // Auth routes
     router.post('/auth/login/', userController.login);
+    router.post('/auth/logout/', auth, userController.logout);
     router.post('/auth/register/', multer, userController.register);
 
     // Users routes

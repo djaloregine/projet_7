@@ -14,6 +14,6 @@ module.exports = (req, res, next) => {
         req.isAdmin = verified.isAdmin;
         next();
     } catch {
-        res.status(401).json({ error: 'Invalid request!' });
+        res.status(401).json({ error: 'Accès refusé ! (InvalideToken)' });
     }
 };

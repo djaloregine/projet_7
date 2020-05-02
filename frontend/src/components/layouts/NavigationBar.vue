@@ -1,0 +1,72 @@
+<template>
+    <div>
+        <b-navbar class="mb-4" type="dark" variant="dark">
+            <b-container>
+                <b-navbar-brand href="#">
+                    <router-link :to="{ name: 'home'}">
+                        <img src="../../assets/logos/icon-left-font-monochrome-white.svg" height="40" class="d-inline-block align-top" alt="">
+                    </router-link>
+                </b-navbar-brand>
+
+                <b-navbar-nav>
+
+                    <template v-if="authentificated">
+                        <b-nav-item>
+                            <router-link :to="{ name: 'dashboard'}">Dashboard</router-link>
+                        </b-nav-item>
+                        <b-nav-item>
+                            <router-link :to="{ name: 'userProfile'}">{{ user.firstname }} {{ user.lastname }}</router-link>
+                        </b-nav-item>
+                        <b-nav-item @click.prevent="signOut">Déconnexion</b-nav-item>
+                    </template>
+
+                    <template v-else>
+                        <b-nav-item href="#">
+                            <router-link :to="{ name: 'login'}">Connexion</router-link>
+                        </b-nav-item>
+                        <b-nav-item href="#">
+                            <router-link :to="{ name: 'register'}">Inscription</router-link>
+                        </b-nav-item>
+                    </template>
+
+                </b-navbar-nav>
+            </b-container>
+        </b-navbar>
+    </div>
+</template>
+
+<script>
+    import { mapGetters, mapActions } from 'vuex'
+
+    export default {
+        computed: {
+            ...mapGetters({
+                authentificated: 'auth/authentificated',
+                user: 'auth/user'
+            })
+        },
+
+        methods: {
+            ...mapActions({
+                signOutAction: 'auth/signOut'
+            }),
+
+            signOut () {
+                this.signOutAction().then(() => {
+                    this.$router.replace({
+                        name: 'login',
+                        params: { message: "Vous êtes déconnecté !"}
+                    })
+                })
+            }
+        }
+
+    }
+</script>
+
+<style scoped>
+    .nav-item a {
+        color: #fff!important;
+        /* text-decoration: none; */
+    }
+</style>

@@ -14,7 +14,6 @@ const LETTERS_REGEX = /^[A-Za-z]+$/;
 
 // Register User 
 exports.register = (req, res) => {
-
     // Params
     var email      = req.body.email;
     var nom        = req.body.lastname;
@@ -124,12 +123,28 @@ exports.login = (req, res) => {
 
             // return userId & token
             res.status(200).json({
-                userId: user.id,
-                token: 'Bearer '+token
+                // userId: user.id,
+                token: token
             });
         })
         .catch(error => {
-            res.status(400).json({ error });
+            res.status(401).json({ error });
+        })
+}
+
+// Logout User
+exports.logout = (req, res) => {
+
+    getUserById(req.userId)
+        .then(user => {
+            if(!user) return res.status(400).json({ error: "L'utilisateur n'existe pas !" });
+
+            return res.status(200).json({
+                success: 'Déconnexion réussite !'
+            });
+        })
+        .catch(error => {
+            return res.status(401).json(error);
         })
 }
 
@@ -138,6 +153,8 @@ exports.getUserProfile = (req, res) => {
 
     getUserById(req.userId)
         .then(user =>{
+            if(!user) return res.status(400).json({ error: "L'utilisateur n'existe pas !" });
+
             return res.status(200).json(user);
         })
         .catch(error => {
