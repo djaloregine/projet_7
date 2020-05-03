@@ -30,9 +30,15 @@ export default {
 
     actions: {
         async signIn({ dispatch }, credentials) {
-            let response = await axios.post("auth/login", credentials)
+            try {
+                let response = await axios.post("auth/login", credentials)
+                
+                return dispatch('attempt', response.data.token)
+            } catch (err) {
+                // console.log(err.response.data);
+                return err.response.data.error
+            }
             
-            return dispatch('attempt', response.data.token)
         },
 
         async attempt ({ commit, state }, token) {

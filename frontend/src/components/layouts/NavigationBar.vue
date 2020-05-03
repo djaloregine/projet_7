@@ -1,38 +1,47 @@
 <template>
     <div>
-        <b-navbar class="mb-4" type="dark" variant="dark">
+        <b-navbar toggleable="lg" class="mb-4" type="dark" variant="dark">
             <b-container>
                 <b-navbar-brand href="#">
-                    <router-link :to="{ name: 'home'}">
-                        <img src="../../assets/logos/icon-left-font-monochrome-white.svg" height="40" class="d-inline-block align-top" alt="">
+                    <router-link :to="{ name: 'dashboard'}">
+                        <img src="@/assets/logos/icon-left-font-monochrome-white.svg" height="38" class="d-inline-block align-top" alt="">
                     </router-link>
                 </b-navbar-brand>
 
-                <b-navbar-nav>
+                <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-                    <template v-if="authentificated">
-                        <b-nav-item>
-                            <router-link :to="{ name: 'dashboard'}">Dashboard</router-link>
-                        </b-nav-item>
-                        <b-nav-item>
-                            <router-link :to="{ name: 'userProfile'}">{{ user.firstname }} {{ user.lastname }}</router-link>
-                        </b-nav-item>
-                        <b-nav-item @click.prevent="signOut">Déconnexion</b-nav-item>
-                    </template>
+                <b-collapse id="nav-collapse" is-nav>
 
-                    <template v-else>
-                        <b-nav-item href="#">
-                            <router-link :to="{ name: 'login'}">Connexion</router-link>
-                        </b-nav-item>
-                        <b-nav-item href="#">
-                            <router-link :to="{ name: 'register'}">Inscription</router-link>
-                        </b-nav-item>
-                    </template>
+                    <b-navbar-nav class="ml-auto">
+                        <template v-if="authentificated">
+                            <b-nav-item>
+                                <router-link :to="{ name: 'dashboard'}">Dashboard</router-link>
+                            </b-nav-item>
+                            <b-nav-item>
+                                <router-link :to="{ name: 'userProfile'}">{{ user.firstname }} {{ user.lastname }}</router-link>
+                            </b-nav-item>
+                            <b-nav-item @click.prevent="signOut">Déconnexion</b-nav-item>
+                        </template>
 
-                </b-navbar-nav>
+                        <template v-else>
+                            <b-nav-item href="#">
+                                <router-link :to="{ name: 'login'}">Connexion</router-link>
+                            </b-nav-item>
+                            <b-nav-item href="#">
+                                <router-link :to="{ name: 'register'}">Inscription</router-link>
+                            </b-nav-item>
+                        </template>
+                    </b-navbar-nav>
+                </b-collapse>
             </b-container>
         </b-navbar>
-    </div>
+
+
+
+                
+
+                
+        </div>
 </template>
 
 <script>

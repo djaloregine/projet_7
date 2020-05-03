@@ -1,30 +1,43 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
-import Dashboard from "../views/Dashboard.vue";
-import UserProfile from "../views/UserProfile.vue";
-import store from "../store";
+import store from "@/store";
+
+// Auth views
+import Login from "@/views/auth/Login.vue";
+import Register from "@/views/auth/Register.vue";
+// User views
+import Dashboard from "@/views/user/Dashboard.vue";
+import UserProfile from "@/views/user/UserProfile.vue";
+// Items views
+import ItemsList from "@/views/items/ItemsList.vue";
+import ShowItem from "@/views/items/ShowItem.vue";
+import AddItem from "@/views/items/AddItem.vue";
+import UpdateItem from "@/views/items/UpdateItem.vue";
+// Messages views
+import MessagesList from "@/views/messages/MessagesList.vue";
+import ShowMessage from "@/views/messages/ShowMessage.vue";
+import AddMessage from "@/views/messages/AddMessage.vue";
+import UpdateMessage from "@/views/messages/UpdateMessage.vue";
+// Medias views
+import MediasList from "@/views/medias/MediasList.vue";
+import ShowMedia from "@/views/medias/ShowMedia.vue";
+import AddMedia from "@/views/medias/AddMedia.vue";
+import UpdateMedia from "@/views/medias/UpdateMedia.vue";
 
 Vue.use(VueRouter);
 
 // middleware pour ne pas acceder au page sans authentification
 const guard = (to, from, next) => {
-  if (!store.getters['auth/authentificated']) {
+  if (!store.getters["auth/authentificated"]) {
     return next({
-      name: 'login'
-    })
+      name: "login"
+    });
   }
-  next()
-}
+  next();
+};
 
 const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: Home
-  },
+  // Auth routes
   {
     path: "/connexion",
     name: "login",
@@ -35,6 +48,7 @@ const routes = [
     name: "register",
     component: Register
   },
+  // User routes
   {
     path: "/dashboard",
     name: "dashboard",
@@ -47,7 +61,83 @@ const routes = [
     component: UserProfile,
     beforeEnter: guard
   },
-  { path: '*', redirect: '/' }
+  // Items routes
+  {
+    path: "/marketplace",
+    name: "itemsList",
+    component: ItemsList,
+    beforeEnter: guard
+  },
+  {
+    path: "/marketplace/:itemId",
+    name: "showItem",
+    component: ShowItem,
+    beforeEnter: guard
+  },
+  {
+    path: "/marketplace/new",
+    name: "addItem",
+    component: AddItem,
+    beforeEnter: guard
+  },
+  {
+    path: "/marketplace/:itemId",
+    name: "updateItem",
+    component: UpdateItem,
+    beforeEnter: guard
+  },
+  // Medias routes
+  {
+    path: "/medias",
+    name: "mediasList",
+    component: MediasList,
+    beforeEnter: guard
+  },
+  {
+    path: "/medias/:mediaId",
+    name: "showMedia",
+    component: ShowMedia,
+    beforeEnter: guard
+  },
+  {
+    path: "/medias/new",
+    name: "addMedia",
+    component: AddMedia,
+    beforeEnter: guard
+  },
+  {
+    path: "/medias/:mediaId",
+    name: "updateMedia",
+    component: UpdateMedia,
+    beforeEnter: guard
+  },
+  // Messages routes
+  {
+    path: "/messages",
+    name: "messagesList",
+    component: MessagesList,
+    beforeEnter: guard
+  },
+  {
+    path: "/messages/:messageId",
+    name: "showMessage",
+    component: ShowMessage,
+    beforeEnter: guard
+  },
+  {
+    path: "/messages/new",
+    name: "addMessage",
+    component: AddMessage,
+    beforeEnter: guard
+  },
+  {
+    path: "/messages/:messageId",
+    name: "updateMessage",
+    component: UpdateMessage,
+    beforeEnter: guard
+  },
+  // si aucune correspondance : retour dashboard
+  { path: "*", redirect: "/dashboard" }
 ];
 
 const router = new VueRouter({

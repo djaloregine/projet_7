@@ -123,7 +123,7 @@ function getUserById(id) {
 function getMedias() {
     return new Promise((resolve, reject) => {
 
-        const items = models.Item.findAll({
+        const medias = models.Media.findAll({
             order: [
                 ['id', 'DESC']
             ],
@@ -133,10 +133,10 @@ function getMedias() {
             }]
         });
 
-        if(items) {
-            resolve(items);
+        if(medias) {
+            resolve(medias);
         } else {
-            reject(Error('Aucunes annonces trouvées !'));
+            reject(Error('Aucunes medias trouvées !'));
         }
     })
 }

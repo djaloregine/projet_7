@@ -3,6 +3,7 @@
     <h2>Connexion</h2>
     <hr>
     <b-alert show dismissible fade variant="success" v-if="$route.params.message"> {{ $route.params.message }}</b-alert>
+    <b-alert show fade variant="danger" v-if="error"> {{ error }}</b-alert>
 
     <b-form @submit.prevent="onSubmit">
       <b-form-group id="input-group-1" label="Adresse email :" label-for="input-email" >
@@ -33,7 +34,8 @@
         form: {
           email: '',
           password: ''
-        }
+        },
+        error: ''
       }
     },
     methods: {
@@ -42,7 +44,10 @@
       }),
 
       onSubmit() {
-        this.signIn(this.form).then(() => {
+        this.signIn(this.form).then((res) => {
+          if(res) {
+            this.error = res
+          }
           this.$router.replace({
             name: 'dashboard',
             params: { message: "Vous êtes connecté !"}

@@ -2,13 +2,14 @@
   <div>
     <h2>Inscription</h2>
     <hr>
-    <b-form @submit.prevent="onSubmit">
+    <b-alert show fade variant="danger" v-if="error"> {{ error }}</b-alert>
 
+    <b-form @submit.prevent="onSubmit">
+      <div class="mb-3" id="preview">
+        <img v-if="url" :src="url" />
+      </div>
       <!-- Image input -->
       <b-form-group id="input-group-5" label="Image de profil :">
-        <div class="mb-3" id="preview">
-          <img v-if="url" :src="url" />
-        </div>
         <b-form-file
           v-model="form.file"
           placeholder="Choisir un fichier ou déposer le ici..."
@@ -59,17 +60,21 @@
           password: '',
           file: ''
         },
-        url: ''
+        url: '',
+        error:''
       }
     },
     methods: {
       onSubmit() {
-        axios.post('/auth/register', this.form).then(response => {
-          // console.log(response)
-          if(response.status === 200) {
-            this.$router.replace({ name: 'login', params: { message: response.data.success }});
-          }
-        })
+        axios.post('/auth/register', this.form)
+          .then(response => {
+            if(response.status === 200) {
+              this.$router.replace({ name: 'login', params: { message: response.data.success }});
+            }
+          })
+          .catch((err) => {
+            this.error = err.response.data.error
+          })
       },
 
       onFileChange(e) {
