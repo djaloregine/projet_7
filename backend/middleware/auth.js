@@ -10,7 +10,6 @@ module.exports = (req, res, next) => {
         // rajouter une condition plutard : req.body.userId == userID
         if (!verified.userId) return res.status(401).send('Token invalid !');
         
-        console.log("================================"+verified.userId)
         req.userId = verified.userId;
         req.isAdmin = verified.isAdmin;
         next();

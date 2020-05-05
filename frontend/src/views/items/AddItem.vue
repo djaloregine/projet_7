@@ -3,8 +3,9 @@
         <h3>Ajouter une annonce</h3>
         <hr>
         <b-alert show fade variant="danger" v-if="error"> {{ error }}</b-alert>
+        
         <!-- Create Item Form -->
-        <b-form @submit.prevent="createItem">
+        <b-form @submit.prevent="createItem" enctype="multipart/form-data">
             <!-- Image preview -->
             <div class="mb-3" id="preview">
                 <img v-if="imgPreview" :src="imgPreview" />

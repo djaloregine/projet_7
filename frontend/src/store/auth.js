@@ -66,5 +66,6 @@ export default {
                 commit('SET_USER', null)
             })
         }
+
     }
 }

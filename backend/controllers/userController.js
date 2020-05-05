@@ -16,12 +16,14 @@ const LETTERS_REGEX = /^[A-Za-z]+$/;
 // Register User 
 exports.register = (req, res) => {
     // Params
+    var imageUrl;
     var email      = req.body.email;
     var nom        = req.body.lastname;
     var prenom     = req.body.firstname;
     var motdepasse = req.body.password;
-    var imageUrl   = 'http://localhost:3000/images/profiles/user.png';
 
+    console.log(req.body)
+    console.log(req.file)
     // Check input null
     if (!email || !motdepasse || !nom || !prenom) {
         return res.status(400).json({ error: 'Certains champs sont vides !' });
@@ -54,8 +56,8 @@ exports.register = (req, res) => {
     }
     
     // Check image 
-    // if(!req.file) return res.status(400).json({ error: "Une image est obligatoire !" });
-    // imageUrl = `${req.protocol}://${req.get('host')}/images/profiles/${req.file.filename}`;
+    if(!req.file) return res.status(400).json({ error: "Une image est obligatoire !" });
+    imageUrl = `${req.protocol}://${req.get('host')}/images/profiles/${req.file.filename}`;
 
     // Get User by email
     getUserByEmail(email)
@@ -166,11 +168,8 @@ exports.getUserProfile = (req, res) => {
 // Update User Profile
 exports.updateUserProfile = (req, res) => {
 
-    // creer une fonction pour rassembler tout les verif et rajouter une variable erreur
-    // si erreur est null = ok sinon stop le script
-
     // Check input null
-    if (!req.body.email || !req.body.password || !req.body.firstname || !req.body.lastname) {
+    if (!req.body.email || !req.body.firstname || !req.body.lastname) {
         return res.status(400).json({ error: 'Certains champs sont vides !' });
     }
 
@@ -195,30 +194,30 @@ exports.updateUserProfile = (req, res) => {
         return res.status(400).json({ error: 'Le nom doit contenir que des lettres' });
     }
 
-    // Check password
-    if (!PASSWORD_REGEX.test(req.body.password)) {
-        return res.status(400).json({ error: 'Le mot de passe est invalide. Il doit avoir une longueur de 4 à 16 caractères et contenir au moins 1 chiffre.' });
-    }
-
-    // Check image
-    // if(!req.file) return res.status(400).json({ error: "Une image est obligatoire !" });
-    // imageUrl = `${req.protocol}://${req.get('host')}/images/profiles/${req.file.filename}`;
-
     getUserById(req.userId)
         .then(user => {
             if(!user) return res.status(400).json({ error: "L'utilisateur n'existe pas !" });
 
             // Reprend l'image dans la bdd si aucune image est ajoutée
-            // if(!req.file) { 
-            //     imageUrl = user.imgUrl; 
-            // } else {
-            //     imageUrl = `${req.protocol}://${req.get('host')}/images/medias/${req.file.filename}`;
-            // }
+            if(!req.file) { 
+                imageUrl = user.imgUrl; 
+            } else {
+                imageUrl = `${req.protocol}://${req.get('host')}/images/profiles/${req.file.filename}`;
 
-            return queryUpdateUser(user, req.body); //imageUrl
+                // Supprime l'ancienne image
+                const filename = user.imgUrl.split('/images/')[1];
+
+                fs.unlink("images/"+filename, function (error) {
+                    if (error) return console.log(error);
+                    // si pas d'erreur, l'image est effacé avec succès !
+                    console.log('Image supprimée !');
+                }); 
+            }
+
+            return queryUpdateUser(user, req.body, imageUrl);
         })
         .then(results => {
-            res.status(200).json({ results });
+            res.status(200).json({ success: "Compte modifié !"});
         })
         .catch(error => {
             res.status(400).json({ error });
@@ -231,10 +230,19 @@ exports.deleteUserProfile = (req, res) => {
     getUserById(req.userId)
         .then(user => {
             if(!user) return res.status(400).json({ error: "L'utilisateur n'existe pas !" });
+
+            // Supprime l'ancienne image
+            const filename = user.imgUrl.split('/images/')[1];
+
+            fs.unlink("images/"+filename, function (error) {
+                if (error) return console.log(error);
+                // si pas d'erreur, l'image est effacé avec succès !
+                console.log('Image supprimée !');
+            }); 
+            
             return queryDeleteUser(user);
         })
         .then(results => {
-            console.log(results);
             res.status(200).json({ message: 'Compte supprimé !' });
         })
         .catch(err => {
@@ -280,14 +288,14 @@ function getUserByEmail(email) {
 
 function queryUpdateUser(user, formParams, imageUrl) {
     return new Promise((resolve, reject) => {
-        // Update user after verification
+        
         const userModify = user.update(
             {
                 firstname: formParams.firstname,
                 lastname: formParams.lastname,
                 email: formParams.email,
+                imgUrl: imageUrl,
                 updatedAt: new Date()
-                // imgUrl: imageUrl
             }
         );
 

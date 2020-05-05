@@ -6,15 +6,15 @@ const MIME_TYPES = {
   'image/png': 'png'
 };
 
-
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-
+    debugger;
+    
     // Change destination de l'image en fonction de l'url 
     var domaine = req.url.split('/')[1];
     var target;
 
-    if(domaine == "users") {
+    if(domaine == "auth" || domaine == "users") {
       target = 'images/profiles';
     } else if (domaine == "medias") {
       target = 'images/medias';

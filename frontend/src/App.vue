@@ -17,3 +17,15 @@
     }
   }
 </script>
+
+<style>
+  #preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #preview img {
+    max-width: 100%;
+    max-height: 300px;
+  }
+</style>

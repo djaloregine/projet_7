@@ -8,6 +8,7 @@ import Register from "@/views/auth/Register.vue";
 // User views
 import Dashboard from "@/views/user/Dashboard.vue";
 import UserProfile from "@/views/user/UserProfile.vue";
+import UpdateUser from "@/views/user/UpdateUser.vue";
 // Items views
 import ItemsList from "@/views/items/ItemsList.vue";
 import ShowItem from "@/views/items/ShowItem.vue";
@@ -59,6 +60,12 @@ const routes = [
     path: "/mon-profil",
     name: "userProfile",
     component: UserProfile,
+    beforeEnter: guard
+  },
+  {
+    path: "/mon-profil/update",
+    name: "updateUser",
+    component: UpdateUser,
     beforeEnter: guard
   },
   // Items routes

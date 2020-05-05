@@ -1,14 +1,13 @@
 <template>
   <div>
-    <h2>Inscription</h2>
+    <h2>Modification du profil</h2>
     <hr>
     <b-alert show fade variant="danger" v-if="error"> {{ error }}</b-alert>
 
-    <!-- Create User Form -->
-    <b-form @submit.prevent="createUser" enctype="multipart/form-data">
+    <b-form @submit.prevent="editUser" enctype="multipart/form-data">
       <!-- Image preview -->
       <div class="mb-3" id="preview">
-          <img v-if="imgPreview" :src="imgPreview" />
+          <img :src="imgPreview ? imgPreview : user.imgUrl" />
       </div>
 
       <!-- Image input -->
@@ -34,11 +33,6 @@
         <b-form-input id="input-email" type="email" placeholder="Entrer votre adresse email" required v-model="user.email" ></b-form-input>
       </b-form-group>
 
-      <!-- Password input -->
-      <b-form-group id="input-group-4" label="Votre mot de passe :" label-for="input-password">
-        <b-form-input id="input-password" type="password" placeholder="Entrer votre mot de passe" required v-model="user.password" ></b-form-input>
-      </b-form-group>
-
       <b-button class="float-right" type="submit" variant="primary">Se connecter</b-button>
     </b-form>
   </div>
@@ -58,10 +52,9 @@
           lastname: '',
           firstname: '',
           email: '',
-          password: '',
         },
-        imgPreview: '',
         file: '',
+        imgPreview: '',
         error:''
       }
     },
@@ -70,23 +63,27 @@
         this.file = this.$refs.file.files[0];
         this.imgPreview = URL.createObjectURL(this.file);
       },
-      async createUser() {
-        const formData = new FormData();
-        formData.append('lastname', this.user.lastname);
-        formData.append('firstname', this.user.firstname);
-        formData.append('email', this.user.email);
-        formData.append('password', this.user.password);
-        formData.append('file', this.file);
+      async editUser() {
+            var formData = new FormData();
+            formData.append('file', this.file);
+            formData.append('lastname', this.user.lastname);
+            formData.append('firstname', this.user.firstname);
+            formData.append('email', this.user.email);
 
-        try {
-            let response = await axios.post("auth/register", formData);
-            // console.log(response.data);
+            try {
+                let response = await axios.put("/users/me", formData);
+                // console.log(response.data);
 
-            this.$router.replace({ name: 'login', params: { message: response.data.success }});
-        } catch (err) {
-            this.error = err.response.data.error
-        }
-      }
+                this.$router.replace({ name: 'userProfile', params: { message: response.data.success }});
+            } catch (err) {
+                this.error = err.response.data.error
+            }
+        },
+    },
+    mounted () {
+        axios.get("users/me").then(response => {
+            this.user = response.data;
+        })
     }
   };
 </script>
