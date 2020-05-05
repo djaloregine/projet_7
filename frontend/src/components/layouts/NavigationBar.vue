@@ -34,14 +34,8 @@
                     </b-navbar-nav>
                 </b-collapse>
             </b-container>
-        </b-navbar>
-
-
-
-                
-
-                
-        </div>
+        </b-navbar>                
+    </div>
 </template>
 
 <script>

@@ -5,13 +5,15 @@
                 <h3>Media</h3>
             </b-col>
             <b-col sm="4">
-                <div class="float-right">
-                    <router-link :to="{ name: 'updateMedia', params: { mediaId: media.id}}">
-                        <b-button variant="warning">Modifier</b-button>
-                    </router-link>
+                <template v-if="media.UserId === userInfos.id || userInfos.isAdmin === true">
+                    <div class="float-right">
+                        <router-link :to="{ name: 'updateMedia', params: { mediaId: media.id}}">
+                            <b-button variant="warning">Modifier</b-button>
+                        </router-link>
 
-                    <b-button v-on:click="deleteMedia" variant="danger" class="ml-2">Supprimer</b-button>
-                </div>
+                        <b-button v-on:click="deleteMedia" variant="danger" class="ml-2">Supprimer</b-button>
+                    </div>
+                </template>   
             </b-col>
         </b-row>
         <hr>
@@ -28,9 +30,15 @@
 
 <script>
     import axios from "axios"
+    import { mapGetters } from 'vuex'
 
     export default {
         name: "showMedia",
+        computed: {
+            ...mapGetters({
+                userInfos: 'auth/user'
+            })
+        },
         data () {
             return {
                 media: {},

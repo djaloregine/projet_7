@@ -5,13 +5,15 @@
                 <h3>Message</h3>
             </b-col>
             <b-col sm="4">
-                <div class="float-right">
-                    <router-link :to="{ name: 'updateMessage', params: { messageId: message.id}}">
-                        <b-button variant="warning">Modifier</b-button>
-                    </router-link>
+                <template v-if="message.UserId === userInfos.id || userInfos.isAdmin === true">
+                    <div class="float-right">
+                        <router-link :to="{ name: 'updateMessage', params: { messageId: message.id}}">
+                            <b-button variant="warning">Modifier</b-button>
+                        </router-link>
 
-                    <b-button v-on:click="deleteMessage" variant="danger" class="ml-2">Supprimer</b-button>
-                </div>
+                        <b-button v-on:click="deleteMessage" variant="danger" class="ml-2">Supprimer</b-button>
+                    </div>
+                </template>
             </b-col>
         </b-row>
         <hr>
@@ -28,9 +30,15 @@
 
 <script>
     import axios from "axios"
+    import { mapGetters } from 'vuex'
 
     export default {
         name: "showMessage",
+        computed: {
+            ...mapGetters({
+                userInfos: 'auth/user'
+            })
+        },
         data () {
             return {
                 message: {},

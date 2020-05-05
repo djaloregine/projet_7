@@ -5,19 +5,21 @@
                 <h3>Annonce</h3>
             </b-col>
             <b-col sm="4">
-                <div class="float-right">
-                    <router-link :to="{ name: 'updateItem', params: { itemId: item.id}}">
-                        <b-button variant="warning">Modifier</b-button>
-                    </router-link>
+                <template v-if="item.UserId === userInfos.id || userInfos.isAdmin === true">
+                    <div class="float-right">
+                        <router-link :to="{ name: 'updateItem', params: { itemId: item.id}}">
+                            <b-button variant="warning">Modifier</b-button>
+                        </router-link>
 
-                    <b-button v-on:click="deleteItem" variant="danger" class="ml-2">Supprimer</b-button>
-                </div>
+                        <b-button v-on:click="deleteItem" variant="danger" class="ml-2">Supprimer</b-button>
+                    </div>
+                </template>
             </b-col>
         </b-row>
         <hr>
         <b-media>
             <template v-slot:aside>
-                <b-img :src="item.User.imgUrl" width="64" :alt="user.firstname"></b-img>
+                <b-img :src="user.imgUrl" width="64" :alt="user.firstname"></b-img>
             </template>
 
             <h5 class="mt-0">{{ user.firstname }} {{ user.lastname }}</h5>
@@ -31,9 +33,15 @@
 
 <script>
     import axios from "axios"
+    import { mapGetters } from 'vuex'
 
     export default {
         name: "showItem",
+        computed: {
+            ...mapGetters({
+                userInfos: 'auth/user'
+            })
+        },
         data () {
             return {
                 item: {},

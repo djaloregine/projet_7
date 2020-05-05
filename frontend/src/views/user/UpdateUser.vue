@@ -33,7 +33,7 @@
         <b-form-input id="input-email" type="email" placeholder="Entrer votre adresse email" required v-model="user.email" ></b-form-input>
       </b-form-group>
 
-      <b-button class="float-right" type="submit" variant="primary">Se connecter</b-button>
+      <b-button class="float-right" type="submit" variant="primary">Modifier</b-button>
     </b-form>
   </div>
 </template>
