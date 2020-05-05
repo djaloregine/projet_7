@@ -8,7 +8,13 @@
     <b-row class="mb-3">
       <b-col md="6" sm="12" class="mt-3">
         <router-link :to="{ name: 'mediasList'}">
-          <b-card header="Forum multimédia" class="text-center">
+          <b-card
+            header="Forum multimédia"
+            header-text-variant="white"
+            header-bg-variant="secondary"
+            border-variant="secondary"
+            class="text-center"
+          >
             <b-card-text>Partagez vos dernières images ici !</b-card-text>
           </b-card>
         </router-link>
@@ -16,7 +22,13 @@
       </b-col>
       <b-col md="6" sm="12" class="mt-3">
         <router-link :to="{ name: 'itemsList'}">
-          <b-card header="Annonces" class="text-center">
+          <b-card
+            header="Annonces"
+            header-text-variant="white"
+            header-bg-variant="secondary"
+            border-variant="secondary"
+            class="text-center"
+          >
             <b-card-text>Retrouvez les dernières annonces de ventes ici !</b-card-text>
           </b-card>
         </router-link>
@@ -26,7 +38,13 @@
     <b-row>
       <b-col md="6" sm="12" class="mt-3">
         <router-link :to="{ name: 'messagesList'}">
-          <b-card header="Forum messages" class="text-center">
+          <b-card
+            header="Forum messages"
+            header-text-variant="white"
+            header-bg-variant="secondary"
+            border-variant="secondary"
+            class="text-center"
+          >
             <b-card-text>Venez discutez et voir les derniers messages ici !</b-card-text>
           </b-card>
         </router-link>

@@ -49,7 +49,7 @@ exports.createMedia = (req, res) => {
         })
 }
 
-// Update a item
+// Update a media
 exports.updateMedia = (req, res) => {
     var imageUrl;
 

@@ -8,6 +8,7 @@
                     </template>
 
                     <h5 class="mt-0">{{ item.User.firstname }} {{ item.User.lastname }}</h5>
+                    <p>{{ item.title }}</p>
                     <p>{{ item.description }}</p>
                     <p>Prix : {{ item.price }}</p>
                     <b-img :src="item.imageUrl" fluid alt=""></b-img>

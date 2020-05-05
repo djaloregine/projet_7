@@ -2,7 +2,7 @@
     <div>
         <b-row>
             <b-col sm="8">
-                <h3>Les annonces</h3>
+                <h3>Annonce</h3>
             </b-col>
             <b-col sm="4">
                 <div class="float-right">
@@ -15,11 +15,17 @@
             </b-col>
         </b-row>
         <hr>
-        <!-- <p>{{ item.User.firstname }} {{ item.User.lastname }}</p> -->
-        <p>{{ item.title }}</p>
-        <p>{{ item.description }}</p>
-        <p>{{ item.price }}</p>
-        <p>{{ item.imageUrl }}</p>
+        <b-media>
+            <template v-slot:aside>
+                <b-img :src="item.User.imgUrl" width="64" :alt="user.firstname"></b-img>
+            </template>
+
+            <h5 class="mt-0">{{ user.firstname }} {{ user.lastname }}</h5>
+            <p>{{ item.title }}</p>
+            <p>{{ item.description }}</p>
+            <p>Prix : {{ item.price }}</p>
+            <b-img :src="item.imageUrl" fluid alt=""></b-img>
+        </b-media>
     </div>
 </template>
 
@@ -30,13 +36,15 @@
         name: "showItem",
         data () {
             return {
-                item: {}
+                item: {},
+                user: {}
             }
         },
         methods: {
             async deleteItem() {
                 try {
                     let response = await axios.delete("items/"+this.$route.params.itemId);
+                    console.log(response);
 
                     this.$router.replace({
                         name: 'itemsList',
@@ -50,7 +58,7 @@
         mounted () {
             axios.get('items/'+this.$route.params.itemId).then(response => {
                 this.item = response.data
-                // console.log(this.item)
+                this.user = response.data.User
             })
         }
     };

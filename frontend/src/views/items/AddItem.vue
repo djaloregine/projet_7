@@ -2,17 +2,21 @@
     <div>
         <h3>Ajouter une annonce</h3>
         <hr>
+        <b-alert show fade variant="danger" v-if="error"> {{ error }}</b-alert>
         <!-- Create Item Form -->
         <b-form @submit.prevent="createItem">
             <!-- Image preview -->
             <div class="mb-3" id="preview">
-                <img v-if="imageUrl" :src="imageUrl" />
+                <img v-if="imgPreview" :src="imgPreview" />
             </div>
-            
+
             <!-- Image input -->
-            <b-form-group id="input-group-file" label="Image de l'annonce :">
-                <b-form-file class="mt-3" plain @change="onFileChange"></b-form-file>
-            </b-form-group>
+            <div class="mb-3">Selectionner une image</div>
+            <input 
+                type="file"
+                ref="file"
+                @change="selectFile"
+            />
 
             <!-- Title input -->
             <b-form-group id="input-group-1" label="Titre :" label-for="input-title" >
@@ -71,24 +75,36 @@
                     description: '',
                     price: ''
                 },
-                imageUrl: ''
+                imgPreview: '',
+                file: '',
+                error: ''
             }
         },
         methods: {
-            async createItem() {
-                console.log('item :  '+ this.item);
-                // let response = await axios.post("items", {
-                //         headers: {
-                //             'Content-Type': this.item.imageUrl
-                //         },
-                //         body: this.item
-                //     });
-                let response = await axios.post("items", this.item, {file: this.imageUrl});
-                console.log(response.data);
+            selectFile() {
+                this.file = this.$refs.file.files[0];
+                this.imgPreview = URL.createObjectURL(this.file);
             },
-            onFileChange(e) {
-                const file = e.target.files[0];
-                this.item.imageUrl = URL.createObjectURL(file);
+            async createItem() {
+                const formData = new FormData();
+                formData.append('title', this.item.title);
+                formData.append('description', this.item.description);
+                formData.append('price', this.item.price);
+                formData.append('file', this.file);
+
+                console.log(formData);
+
+                try {
+                    let response = await axios.post("items", formData);
+                    console.log(response.data);
+
+                    this.$router.replace({
+                        name: 'itemsList',
+                        params: { message: response.data.success}
+                    })
+                } catch (err) {
+                    this.error = err.response.data.error
+                }
             }
         }
     }

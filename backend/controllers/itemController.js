@@ -1,5 +1,6 @@
 // Imports
 const models = require('../models');
+const fs = require('fs');
 
 // Constants
 const REGEX_NUMBERS = /^\d*\.?\d+$/;
@@ -37,7 +38,7 @@ exports.createItem = (req, res) => {
     var description = req.body.description;
     var prix        = req.body.price;
 
-    console.log(req.file)
+    console.log(req.body)
     
     // Check input null
     if (!titre || !description || !prix) {
@@ -62,8 +63,8 @@ exports.createItem = (req, res) => {
     }
 
     // Image url
-    // image = `${req.protocol}://${req.get('host')}/images/items/${req.file.filename}`;
-    image = 'http://localhost:3000/images/items/japon.jpg';
+    image = `${req.protocol}://${req.get('host')}/images/items/${req.file.filename}`;
+    // image = 'http://localhost:3000/images/items/japon.jpg';
 
 
     getUserById(req.userId)
@@ -122,6 +123,15 @@ exports.updateItem = (req, res) => {
                 image = item.imageUrl; 
             } else {
                 image = `${req.protocol}://${req.get('host')}/images/items/${req.file.filename}`;
+
+                // Supprime l'ancienne image
+                const filename = item.imageUrl.split('/images/')[1];
+
+                fs.unlink("images/"+filename, function (error) {
+                    if (error) throw error;
+                    // si pas d'erreur, l'image est effacé avec succès !
+                    console.log('Image supprimée !');
+                }); 
             }
 
             return queryUpdateItem(item, req.body, image);
@@ -145,6 +155,15 @@ exports.deleteItem = (req, res) => {
             if(item.UserId !== req.userId) {
                 if(!req.isAdmin) return res.status(401).json({ error: 'Accès interdit !' });
             }
+
+            // Supprime l'ancienne image
+            const filename = item.imageUrl.split('/images/')[1];
+
+            fs.unlink("images/"+filename, function (error) {
+                if (error) throw error;
+                // si pas d'erreur, l'image est effacé avec succès !
+                console.log('Image supprimée !');
+            }); 
 
             return queryDeleteItem(item);
         })

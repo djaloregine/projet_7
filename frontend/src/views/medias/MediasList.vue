@@ -13,7 +13,7 @@
         <hr>
         <b-alert show dismissible fade variant="success" v-if="$route.params.message"> {{ $route.params.message }}</b-alert>
         
-        <MediaCard v-for="media in medias" :key="media.id" :media="media" />
+        <MediaCard v-for="media in medias" :key="media.id" :media="media" class="mb-2" />
         <b-alert show variant="secondary" v-if="medias.length == null">Il n'y a aucun contenu multimédia !</b-alert>
     </div>
 </template>
