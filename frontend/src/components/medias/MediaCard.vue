@@ -8,7 +8,7 @@
                     </template>
 
                     <h5 class="mt-0">{{ media.User.firstname }} {{ media.User.lastname }}</h5>
-                    <b-img :src="media.imageUrl" fluid alt=""></b-img>
+                    <b-img :src="media.mediaUrl" fluid alt=""></b-img>
                 </b-media>
             </b-card>
         </router-link>

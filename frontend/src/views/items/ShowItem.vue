@@ -10,9 +10,7 @@
                         <b-button variant="warning">Modifier</b-button>
                     </router-link>
 
-                    <router-link :to="{ name: 'addItem'}">
-                        <b-button variant="danger" class="ml-2">Supprimer</b-button>
-                    </router-link>
+                    <b-button v-on:click="deleteItem" variant="danger" class="ml-2">Supprimer</b-button>
                 </div>
             </b-col>
         </b-row>
@@ -33,6 +31,20 @@
         data () {
             return {
                 item: {}
+            }
+        },
+        methods: {
+            async deleteItem() {
+                try {
+                    let response = await axios.delete("items/"+this.$route.params.itemId);
+
+                    this.$router.replace({
+                        name: 'itemsList',
+                        params: { message: response.data.success}
+                    });
+                } catch (err) {
+                    this.error = err.response.data.error
+                }
             }
         },
         mounted () {

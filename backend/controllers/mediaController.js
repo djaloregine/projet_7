@@ -1,5 +1,6 @@
 // Imports
 const models = require('../models');
+const fs = require('fs');
 
 // Get all medias
 exports.getAllMedias = (req, res) => {
@@ -28,14 +29,11 @@ exports.getMedia = (req, res) => {
 
 // Create new item
 exports.createMedia = (req, res) => {
-    // Params
-    var imageUrl;
 
     if(!req.file) return res.status(400).json({ error: "Une image est obligatoire !" });
 
     // Image url
-    imageUrl = `${req.protocol}://${req.get('host')}/images/medias/${req.file.filename}`;
-
+    var imageUrl = `${req.protocol}://${req.get('host')}/images/medias/${req.file.filename}`;
 
     getUserById(req.userId)
         .then(user => {
@@ -66,9 +64,18 @@ exports.updateMedia = (req, res) => {
 
             // Reprend l'image dans la bdd si aucune image est ajoutée
             if(!req.file) { 
-                imageUrl = media.imageUrl; 
+                imageUrl = media.mediaUrl; 
             } else {
                 imageUrl = `${req.protocol}://${req.get('host')}/images/medias/${req.file.filename}`;
+
+                // Supprime l'ancienne image
+                const filename = media.mediaUrl.split('/images/')[1];
+
+                fs.unlink("images/"+filename, function (error) {
+                    if (error) throw error;
+                    // si pas d'erreur, l'image est effacé avec succès !
+                    console.log('Image supprimée !');
+                }); 
             }
 
             return queryUpdateMedia(media, imageUrl);
@@ -92,6 +99,15 @@ exports.deleteMedia = (req, res) => {
             if(media.UserId !== req.userId) {
                 if(!req.isAdmin) return res.status(401).json({ error: 'Accès interdit !' });
             }
+
+            // Supprime l'ancienne image
+            const filename = media.mediaUrl.split('/images/')[1];
+
+            fs.unlink("images/"+filename, function (error) {
+                if (error) throw error;
+                // si pas d'erreur, l'image est effacé avec succès !
+                console.log('Image supprimée !');
+            }); 
 
             return queryDeleteMedia(media);
         })
@@ -144,7 +160,7 @@ function getMedias() {
 function getMediaById(id) {
     return new Promise((resolve, reject) => {
 
-        const item = models.Item.findOne({
+        const media = models.Media.findOne({
             where: { id: id },
             include: [{
                 model: models.User,
@@ -152,62 +168,56 @@ function getMediaById(id) {
             }]
         });
 
-        if(item) {
-            resolve(item);
+        if(media) {
+            resolve(media);
         } else {
             reject(Error('Aucune annonce trouvée !'));
         }
     })
 }
 
-function queryCreateMedia(userId, formParams, image) {
+function queryCreateMedia(userId, image) {
     return new Promise((resolve, reject) => {
 
-        const newItem = models.Item.create({
-            title: formParams.title,
-            description: formParams.description,
-            price: formParams.price,
-            imageUrl: image,
+        const mewMedia = models.Media.create({
+            mediaUrl: image,
             UserId: userId
         });
 
-        if(newItem) {
-            resolve(newItem);
+        if(mewMedia) {
+            resolve(mewMedia);
         } else {
-            reject(Error("Erreur dans la creation de l'annonce !"));
+            reject(Error("Erreur dans la creation du média !"));
         }
     })
     
 }
 
-function queryUpdateMedia(item, formParams, image) {
+function queryUpdateMedia(media, image) {
     return new Promise((resolve, reject) => {
 
-        const updateItem = item.update({
-            title: formParams.title,
-            description: formParams.description,
-            price: formParams.price,
-            imageUrl: image,
+        const updateMedia = media.update({
+            mediaUrl: image,
             updatedAt: new Date()
         });
 
-        if(updateItem) {
-            resolve(updateItem);
+        if(updateMedia) {
+            resolve(updateMedia);
         } else {
-            reject(Error("Erreur dans la creation de l'annonce !"));
+            reject(Error("Erreur dans la creation du média !"));
         }
     })
 }
 
-function queryDeleteMedia(item) {
+function queryDeleteMedia(media) {
     return new Promise((resolve, reject) => {
 
-        const itemRemove = item.destroy();
+        const mediaRemove = media.destroy();
 
-        if(itemRemove) {
-            resolve(itemRemove);
+        if(mediaRemove) {
+            resolve(mediaRemove);
         } else {
-            reject(Error("Erreur dans la suppression de l'annonce !"));
+            reject(Error("Erreur dans la suppression du média !"));
         }
     })
 }

@@ -11,6 +11,8 @@
             </b-col>
         </b-row>
         <hr>
+        <b-alert show dismissible fade variant="success" v-if="$route.params.message"> {{ $route.params.message }}</b-alert>
+        
         <MediaCard v-for="media in medias" :key="media.id" :media="media" />
         <b-alert show variant="secondary" v-if="medias.length == null">Il n'y a aucun contenu multimédia !</b-alert>
     </div>
@@ -33,7 +35,7 @@
         mounted () {
             axios.get('medias').then(response => {
                 this.medias = response.data
-                console.log(this.medias)
+                // console.log(this.medias)
             })
         }
     };

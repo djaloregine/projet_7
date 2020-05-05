@@ -11,6 +11,7 @@
             </b-col>
         </b-row>
         <hr>
+        <b-alert show dismissible fade variant="success" v-if="$route.params.message"> {{ $route.params.message }}</b-alert>
         
         <template v-if="items.length == null">
             <b-alert show variant="secondary" >Il n'y a aucunes annonces !</b-alert>

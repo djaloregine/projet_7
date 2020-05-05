@@ -149,7 +149,7 @@ exports.deleteItem = (req, res) => {
             return queryDeleteItem(item);
         })
         .then(results => {
-            res.status(200).json({ success: 'Message supprimé !' });
+            res.status(200).json({ success: 'Annonce supprimé !' });
         })
         .catch(error => {
             res.status(400).json({ error });
