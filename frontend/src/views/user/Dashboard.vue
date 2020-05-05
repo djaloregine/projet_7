@@ -49,16 +49,37 @@
           </b-card>
         </router-link>
       </b-col>
-      <b-col></b-col>
+      <b-col md="6" sm="12" class="mt-3">
+        <template v-if="userInfos.isAdmin === true">
+          <router-link :to="{ name: 'panelAdmin'}">
+            <b-card
+              header="Panel admin"
+              header-text-variant="white"
+              header-bg-variant="primary"
+              border-variant="primary"
+              class="text-center"
+            >
+              <b-card-text>Voir les dernières news !</b-card-text>
+            </b-card>
+          </router-link>
+        </template>
+      </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-export default {
-  name: "Dashboard",
-  components: {}
-};
+  import { mapGetters } from 'vuex'
+  
+  export default {
+    name: "Dashboard",
+    components: {},
+    computed: {
+      ...mapGetters({
+          userInfos: 'auth/user'
+      })
+    },
+  };
 </script>
 
 <style>

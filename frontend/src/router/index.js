@@ -5,6 +5,8 @@ import store from "@/store";
 // Auth views
 import Login from "@/views/auth/Login.vue";
 import Register from "@/views/auth/Register.vue";
+// Admin views
+import PanelAdmin from "@/views/PanelAdmin.vue";
 // User views
 import Dashboard from "@/views/user/Dashboard.vue";
 import UserProfile from "@/views/user/UserProfile.vue";
@@ -48,6 +50,12 @@ const routes = [
     path: "/inscription",
     name: "register",
     component: Register
+  },
+  // Admin routes
+  {
+    path: "/panel-admin",
+    name: "panelAdmin",
+    component: PanelAdmin
   },
   // User routes
   {

@@ -20,7 +20,7 @@
                             <b-nav-item>
                                 <router-link :to="{ name: 'userProfile'}">{{ user.firstname }} {{ user.lastname }}</router-link>
                             </b-nav-item>
-                            <b-nav-item @click.prevent="signOut">Déconnexion</b-nav-item>
+                            <b-nav-item @click.prevent="signOut">Deconnexion</b-nav-item>
                         </template>
 
                         <template v-else>
@@ -70,6 +70,7 @@
 <style scoped>
     .nav-item a {
         color: #fff!important;
+        text-transform: capitalize;
         /* text-decoration: none; */
     }
 </style>
