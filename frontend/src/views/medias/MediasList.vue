@@ -12,7 +12,7 @@
         </b-row>
         <hr>
         <MediaCard v-for="media in medias" :key="media.id" :media="media" />
-        <b-alert show variant="secondary" v-if="medias.length === 0">Il n'y a aucun contenu multimédia !</b-alert>
+        <b-alert show variant="secondary" v-if="medias.length == null">Il n'y a aucun contenu multimédia !</b-alert>
     </div>
 </template>
 
@@ -27,7 +27,7 @@
         },
         data () {
             return {
-                medias: []
+                medias: {}
             }
         },
         mounted () {

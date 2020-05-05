@@ -11,8 +11,14 @@
             </b-col>
         </b-row>
         <hr>
-        <b-alert show variant="secondary" v-if="items.length === 0">Il n'y a aucunes annonces !</b-alert>
-        <ItemCard v-for="item in items" :key="item.id" :item="item" />
+        
+        <template v-if="items.length == null">
+            <b-alert show variant="secondary" >Il n'y a aucunes annonces !</b-alert>
+        </template>
+
+        <template v-else>
+            <ItemCard v-for="item in items" :key="item.id" :item="item" />
+        </template>
     </div>
 </template>
 
@@ -27,13 +33,13 @@
         },
         data () {
             return {
-                items: []
+                items: {}
             }
         },
         mounted () {
             axios.get('items').then(response => {
                 this.items = response.data
-                console.log(this.items)
+                // console.log(this.items)
             })
         }
     };

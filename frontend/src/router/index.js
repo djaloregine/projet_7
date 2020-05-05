@@ -72,6 +72,7 @@ const routes = [
     path: "/marketplace/:itemId",
     name: "showItem",
     component: ShowItem,
+    props: true,
     beforeEnter: guard
   },
   {
@@ -81,7 +82,7 @@ const routes = [
     beforeEnter: guard
   },
   {
-    path: "/marketplace/:itemId",
+    path: "/marketplace/update/:itemId",
     name: "updateItem",
     component: UpdateItem,
     beforeEnter: guard
@@ -106,7 +107,7 @@ const routes = [
     beforeEnter: guard
   },
   {
-    path: "/medias/:mediaId",
+    path: "/medias/update/:mediaId",
     name: "updateMedia",
     component: UpdateMedia,
     beforeEnter: guard
@@ -131,7 +132,7 @@ const routes = [
     beforeEnter: guard
   },
   {
-    path: "/messages/:messageId",
+    path: "/messages/update/:messageId",
     name: "updateMessage",
     component: UpdateMessage,
     beforeEnter: guard

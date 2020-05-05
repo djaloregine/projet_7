@@ -11,8 +11,10 @@
             </b-col>
         </b-row>
         <hr>
-        <b-alert show variant="secondary" v-if="messages.length === 0">Il n'y a aucuns messages !</b-alert>
-        <MessageCard v-for="message in messages" :key="message.id" :message="message" />
+        <b-alert show dismissible fade variant="success" v-if="$route.params.message"> {{ $route.params.message }}</b-alert>
+
+        <b-alert show variant="secondary" v-if="messages.length == null">Il n'y a aucuns messages !</b-alert>
+        <MessageCard v-for="message in messages" :key="message.id" :message="message" class="mb-2" />
     </div>
 </template>
 
@@ -27,12 +29,12 @@
         },
         data () {
             return {
-                messages: []
+                messages: {}
             }
         },
         mounted () {
             axios.get('messages').then(response => {
-                console.log(this.messages)
+                // console.log(this.messages)
                 this.messages = response.data
             })
         }

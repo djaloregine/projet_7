@@ -5,9 +5,11 @@
     <b-alert show fade variant="danger" v-if="error"> {{ error }}</b-alert>
 
     <b-form @submit.prevent="onSubmit">
+      <!-- Image preview -->
       <div class="mb-3" id="preview">
         <img v-if="url" :src="url" />
       </div>
+      
       <!-- Image input -->
       <b-form-group id="input-group-5" label="Image de profil :">
         <b-form-file

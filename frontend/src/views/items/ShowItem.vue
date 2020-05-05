@@ -6,7 +6,7 @@
             </b-col>
             <b-col sm="4">
                 <div class="float-right">
-                    <router-link :to="{ name: 'addItem'}">
+                    <router-link :to="{ name: 'updateItem', params: { itemId: item.id}}">
                         <b-button variant="warning">Modifier</b-button>
                     </router-link>
 
@@ -17,6 +17,11 @@
             </b-col>
         </b-row>
         <hr>
+        <!-- <p>{{ item.User.firstname }} {{ item.User.lastname }}</p> -->
+        <p>{{ item.title }}</p>
+        <p>{{ item.description }}</p>
+        <p>{{ item.price }}</p>
+        <p>{{ item.imageUrl }}</p>
     </div>
 </template>
 

@@ -19,7 +19,7 @@ exports.getMessage = (req, res) => {
     getMessageById(req.params.id)
         .then(message =>{
             if(message == null) return res.status(400).json({ error : "Aucun message trouvé !"});
-            res.status(200).json({ message });
+            res.status(200).json(message);
         })
         .catch(error => {
             res.status(400).json({ error });

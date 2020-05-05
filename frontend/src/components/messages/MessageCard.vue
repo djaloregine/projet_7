@@ -4,7 +4,7 @@
             <b-card>
                 <b-media>
                     <template v-slot:aside>
-                        <b-img :src="message.User.imgUrl" width="64" :alt="message.User.firstname"></b-img>
+                        <b-img :src="message.User.imgUrl" width="64" :alt="message.User.firstname" rounded="circle"></b-img>
                     </template>
 
                     <h5 class="mt-0">{{ message.User.firstname }} {{ message.User.lastname }}</h5>

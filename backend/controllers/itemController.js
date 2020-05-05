@@ -36,12 +36,14 @@ exports.createItem = (req, res) => {
     var titre       = req.body.title;
     var description = req.body.description;
     var prix        = req.body.price;
+
+    console.log(req.file)
     
     // Check input null
     if (!titre || !description || !prix) {
         return res.status(400).json({ error: 'Certains champs sont vides !' });
     }
-    if(!req.file) return res.status(400).json({ error: "Une image est obligatoire !" });
+    // if(!req.file) return res.status(400).json({ error: "Une image est obligatoire !" });
 
 
     // Check titre length
@@ -60,7 +62,8 @@ exports.createItem = (req, res) => {
     }
 
     // Image url
-    image = `${req.protocol}://${req.get('host')}/images/items/${req.file.filename}`;
+    // image = `${req.protocol}://${req.get('host')}/images/items/${req.file.filename}`;
+    image = 'http://localhost:3000/images/items/japon.jpg';
 
 
     getUserById(req.userId)
